@@ -262,10 +262,37 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="bg-soft-beige/30 backdrop-blur-sm p-10 rounded-[3rem] border-2 border-gold/40 space-y-10 shadow-inner">
-              <div className="flex space-x-6"><div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0"><svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><h3 className="font-title font-bold text-zinco text-xl">Nosso Endereço</h3><p className="text-zinco/60 font-body">{ADDRESS}</p></div></div>
-              <div className="flex space-x-6"><div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0"><svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><h3 className="font-title font-bold text-zinco text-xl">Horário de Atendimento</h3><p className="text-zinco/60 font-body text-sm">Segunda a Sábado: 08h às 18h<br />Domingo: Horário da Manhã</p></div></div>
-              <div className="flex space-x-6"><div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0"><svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div><div><h3 className="font-title font-bold text-zinco text-xl">Contato Direto</h3><p className="text-zinco/60 font-body">(11) 95126-6988<br />{EMAIL}</p></div></div>
+            <div className="bg-soft-beige/30 backdrop-blur-sm p-6 lg:p-10 rounded-[3rem] border-2 border-gold/40 space-y-8 lg:space-y-10 shadow-inner">
+              <div className="flex space-x-4 lg:space-x-6">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div>
+                  <h3 className="font-title font-bold text-zinco text-lg lg:text-xl">Nosso Endereço</h3>
+                  <p className="text-zinco/60 font-body text-sm lg:text-base">{ADDRESS}</p>
+                </div>
+              </div>
+
+              <div className="flex space-x-4 lg:space-x-6">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                  <h3 className="font-title font-bold text-zinco text-lg lg:text-xl">Horário de Atendimento</h3>
+                  <p className="text-zinco/60 font-body text-xs lg:text-sm">Segunda a Sábado: 08h às 18h<br />Domingo: Horário da Manhã</p>
+                </div>
+              </div>
+
+              <div className="flex space-x-4 lg:space-x-6">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-title font-bold text-zinco text-lg lg:text-xl">Contato Direto</h3>
+                  <p className="text-zinco/60 font-body text-sm lg:text-base break-all lg:break-normal">(11) 95126-6988<br />{EMAIL}</p>
+                </div>
+              </div>
+
               <div className="rounded-2xl overflow-hidden h-64 border border-gold/20 shadow-xl">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.077241315486!2d-46.776189924546575!3d-23.54350197880922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf015401917f69%3A0xc3f83733c77d61b3!2zUMOhdGlvIE9zYXNjbw!5e0!3m2!1spt-BR!2sbr!4v1714421234567!5m2!1spt-BR!2sbr" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy"></iframe>
               </div>
