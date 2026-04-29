@@ -9,10 +9,12 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   @apply font-body bg-soft-beige text-zinco;
+  overflow-x: hidden;
 }
 
 @layer utilities {

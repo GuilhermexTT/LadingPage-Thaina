@@ -54,7 +54,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative">
+    <main className="relative overflow-x-hidden">
       <Navbar scrolled={scrolled} />
       <Background />
 
@@ -66,7 +66,7 @@ export default function Home() {
               <Image src={thainaMain} alt="Dra. Thainá Carvalho" fill className="object-cover" priority />
               <div className="absolute inset-0 border-[12px] border-white/10 rounded-[2.5rem]" />
             </div>
-            <div className="absolute -z-10 -bottom-6 -left-6 w-full h-full border-2 border-gold rounded-[2.5rem]" />
+            <div className="absolute -z-10 -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 w-full h-full border-2 border-gold rounded-[2.5rem]" />
           </div>
 
           <div className="order-2 flex flex-col space-y-8 text-left animate-fade-in-up">
