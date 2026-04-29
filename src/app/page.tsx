@@ -174,8 +174,8 @@ export default function Home() {
             <div className="space-y-4">
               {proceduresData.filter(p => p.niche === activeNiche).map((proc, idx) => (
                 <div key={idx} className="border-b border-gold/10 last:border-0">
-                  <button onClick={() => setExpandedProc(expandedProc === idx ? null : idx)} className="w-full flex items-center justify-between py-6 group">
-                    <h4 className="text-xl md:text-2xl font-title font-bold text-zinco group-hover:text-gold transition-colors">{proc.name}</h4>
+                  <button onClick={() => setExpandedProc(expandedProc === idx ? null : idx)} className="w-full flex items-center justify-between py-6 group text-left">
+                    <h4 className="text-xl md:text-2xl font-title font-bold text-zinco group-hover:text-gold transition-colors text-left flex-1 pr-4">{proc.name}</h4>
                     <span className={`text-gold transition-transform duration-300 ${expandedProc === idx ? 'rotate-180' : ''}`}><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></span>
                   </button>
                   <div className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedProc === idx ? 'max-h-[800px] pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
