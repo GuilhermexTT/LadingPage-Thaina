@@ -136,7 +136,7 @@ export default function Home() {
               { id: "pele", title: "Pele e Rejuvenescimento", image: rejuvProc, description: "Tecnologias avançadas para saúde e viço" },
               { id: "corporal", title: "Tratamentos Corporais", image: corporalProc, description: "Modelagem, firmeza e cuidado com o corpo" }
             ].map((niche) => (
-              <button key={niche.id} onClick={() => { setActiveNiche(niche.id); setExpandedProc(null); }} className={`relative group h-[400px] rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl ${activeNiche === niche.id ? 'ring-4 ring-gold ring-offset-4 scale-[1.02]' : 'hover:scale-[1.02]'}`}>
+              <button key={niche.id} onClick={() => { setActiveNiche(niche.id); const el = document.getElementById('lista-procedimentos'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className={`relative group h-[400px] rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl ${activeNiche === niche.id ? 'ring-4 ring-gold ring-offset-4 scale-[1.02]' : 'hover:scale-[1.02]'}`}>
                 <Image src={niche.image} alt={niche.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-zinco/90 via-zinco/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 text-left">
@@ -146,7 +146,31 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <div className="max-w-4xl mx-auto bg-white/50 backdrop-blur-sm rounded-[3rem] p-8 md:p-12 shadow-2xl border border-gold/10">
+
+          <div className="max-w-4xl mx-auto mb-12">
+            <p className="text-zinco/40 text-[10px] uppercase tracking-[0.2em] font-bold mb-4 animate-pulse">Selecione uma categoria para ver os detalhes:</p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              {['facial', 'pele', 'corporal'].map((niche) => (
+                <button
+                  key={niche}
+                  onClick={() => {
+                    setActiveNiche(niche);
+                    const el = document.getElementById('lista-procedimentos');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className={`flex-1 py-6 px-4 rounded-2xl transition-all duration-500 font-bold uppercase tracking-[0.2em] text-xs border-2 ${
+                    activeNiche === niche
+                      ? 'bg-gold text-white border-gold shadow-xl scale-105'
+                      : 'bg-white/50 text-zinco/50 border-gold/10 hover:border-gold/30'
+                  }`}
+                >
+                  {niche === 'facial' ? 'Harmonização Facial' : niche === 'pele' ? 'Pele & Rejuvenescimento' : 'Tratamentos Corporais'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div id="lista-procedimentos" className="max-w-4xl mx-auto bg-white/50 backdrop-blur-sm rounded-[3rem] p-8 md:p-12 shadow-2xl border border-gold/10">
             <div className="space-y-4">
               {proceduresData.filter(p => p.niche === activeNiche).map((proc, idx) => (
                 <div key={idx} className="border-b border-gold/10 last:border-0">
@@ -331,13 +355,13 @@ export default function Home() {
             <h4 className="text-white font-title font-bold text-lg mb-6 uppercase tracking-widest">Tratamentos</h4>
             <div className="grid grid-cols-1 gap-6 font-body text-sm">
               <div>
-                <Link href="#servicos" onClick={() => setActiveNiche("facial")} className="text-gold font-bold mb-2 block hover:underline">Harmonização Facial</Link>
+                <Link href="#lista-procedimentos" onClick={() => setActiveNiche("facial")} className="text-gold font-bold mb-2 block hover:underline">Harmonização Facial</Link>
               </div>
               <div>
-                <Link href="#servicos" onClick={() => setActiveNiche("pele")} className="text-gold font-bold mb-2 block hover:underline">Pele e Rejuvenescimento</Link>
+                <Link href="#lista-procedimentos" onClick={() => setActiveNiche("pele")} className="text-gold font-bold mb-2 block hover:underline">Pele e Rejuvenescimento</Link>
               </div>
               <div>
-                <Link href="#servicos" onClick={() => setActiveNiche("corporal")} className="text-gold font-bold mb-2 block hover:underline">Corporais</Link>
+                <Link href="#lista-procedimentos" onClick={() => setActiveNiche("corporal")} className="text-gold font-bold mb-2 block hover:underline">Corporais</Link>
               </div>
             </div>
           </div>
