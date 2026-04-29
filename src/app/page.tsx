@@ -16,7 +16,7 @@ import facialProc from "../../styles/imagens/FacialProcedimento.jpeg";
 import rejuvProc from "../../styles/imagens/RejuvProcedimento.jpeg";
 import corporalProc from "../../styles/imagens/ProcedimentoCorporal.jpeg";
 
-const WHATSAPP_LINK = "https://wa.me/5511951266988?text=Ol%C3%A1!%20Seja%20bem-vindo(a)%20%E2%9C%A8%0A%0AVai%20ser%20um%20prazer%20te%20atender!%20%0AMe%20conta:%20qual%20procedimento%20ou%20resultado%20voc%C3%AA%20est%C3%A1%20buscando%3F%0A%0ASe%20preferir,%20posso%20te%20indicar%20o%20melhor%20tratamento%20atrav%C3%A9s%20de%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20%F0%9F%98%8A";
+const WHATSAPP_LINK = "https://wa.me/5511951266988?text=Ol%C3%A1%2C%20Dra.%20Thain%C3%A1!%20Vi%20seu%20site%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20para%20conhecer%20melhor%20os%20procedimentos.%20Como%20funciona%20o%20seu%20atendimento%3F";
 const INSTAGRAM_LINK = "https://instagram.com/thainacarvalhofisio";
 const EMAIL = "thaina.cardoso.carvalho@gmail.com";
 const ADDRESS = "Pátio Osasco - torre 2 - sala 211, Osasco, São Paulo";

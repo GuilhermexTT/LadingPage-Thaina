@@ -33,12 +33,6 @@ export default function Navbar({ scrolled }: Props) {
               Procedimentos
             </Link>
             <Link
-              href="#hero"
-              className="text-sm font-medium text-zinco/80 hover:text-gold transition-colors font-body"
-            >
-              Sobre Mim
-            </Link>
-            <Link
               href="#resultados"
               className="text-sm font-medium text-zinco/80 hover:text-gold transition-colors font-body"
             >
