@@ -16,7 +16,7 @@ import facialProc from "../../styles/imagens/FacialProcedimento.jpeg";
 import rejuvProc from "../../styles/imagens/RejuvProcedimento.jpeg";
 import corporalProc from "../../styles/imagens/ProcedimentoCorporal.jpeg";
 
-const WHATSAPP_LINK = "https://wa.me/5511951266988";
+const WHATSAPP_LINK = "https://wa.me/5511951266988?text=Ol%C3%A1!%20Seja%20bem-vindo(a)%20%E2%9C%A8%0A%0AVai%20ser%20um%20prazer%20te%20atender!%20%0AMe%20conta:%20qual%20procedimento%20ou%20resultado%20voc%C3%AA%20est%C3%A1%20buscando%3F%0A%0ASe%20preferir,%20posso%20te%20indicar%20o%20melhor%20tratamento%20atrav%C3%A9s%20de%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20%F0%9F%98%8A";
 const INSTAGRAM_LINK = "https://instagram.com/thainacarvalhofisio";
 const EMAIL = "thaina.cardoso.carvalho@gmail.com";
 const ADDRESS = "Pátio Osasco - torre 2 - sala 211, Osasco, São Paulo";
@@ -81,7 +81,7 @@ export default function Home() {
 
             <h1 className="text-5xl lg:text-7xl font-title font-bold text-zinco leading-[1.1]">
               Realce sua Melhor <br /> Versão. <br />
-              <span className="text-gold italic">Resultados Naturais,</span> <br /> Ciência Avançada.
+              <span className="text-gold italic">Resultados Naturais,</span> <br /> Avaliações personalizadas.
             </h1>
 
             <div className="space-y-6 text-lg text-zinco/70 font-body max-w-xl leading-relaxed">
@@ -197,6 +197,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto text-center mb-16">
           <span className="text-sm font-bold text-gold tracking-widest uppercase font-body">Resultados Comprovados</span>
           <h2 className="mt-4 text-4xl lg:text-6xl font-title font-bold text-zinco">Transformações <span className="text-gold italic font-medium">Reais</span></h2>
+          <div className="mt-6 max-w-2xl mx-auto">
+            <p className="text-zinco/60 font-body text-sm leading-relaxed">
+              Resultados reais, respeitando a individualidade de cada paciente. <br />
+              As imagens apresentadas possuem autorização prévia. Os resultados podem variar de acordo com características individuais.
+            </p>
+          </div>
         </div>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
@@ -340,11 +346,17 @@ export default function Home() {
           <div>
             <h4 className="text-white font-title font-bold text-lg mb-6 uppercase tracking-widest">Navegação</h4>
             <ul className="space-y-4 font-body">
-              {['Procedimentos', 'Sobre Mim', 'Antes e Depois', 'Depoimentos', 'FAQ'].map((item) => (
-                <li key={item}>
-                  <Link href={`#${item.toLowerCase().replace(/ /g, '-')}`} className="text-soft-beige/60 hover:text-gold transition-colors flex items-center space-x-2">
+              {[
+                { name: 'Procedimentos', href: '#servicos' },
+                { name: 'Sobre Mim', href: '#sobre' },
+                { name: 'Antes e Depois', href: '#resultados' },
+                { name: 'Depoimentos', href: '#depoimentos' },
+                { name: 'FAQ', href: '#faq' }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link href={item.href} className="text-soft-beige/60 hover:text-gold transition-colors flex items-center space-x-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-gold/40"></span>
-                    <span>{item}</span>
+                    <span>{item.name}</span>
                   </Link>
                 </li>
               ))}
@@ -386,7 +398,10 @@ export default function Home() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-soft-beige/40 text-[10px] uppercase tracking-[0.2em]">
-          <p>© 2024 Dra. Thainá Carvalho. Todos os direitos reservados.</p>
+          <div className="flex flex-col items-center md:items-start space-y-2">
+            <p>© 2024 Dra. Thainá Carvalho. Todos os direitos reservados.</p>
+            <p className="font-bold text-gold/60">CREFITO 3 351518-F</p>
+          </div>
           <div className="flex space-x-8">
             <Link href="/privacidade" className="hover:text-gold transition-colors">Política de Privacidade</Link>
             <Link href="/termos" className="hover:text-gold transition-colors">Termos de Uso</Link>
