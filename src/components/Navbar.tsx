@@ -15,11 +15,11 @@ export default function Navbar({ scrolled }: Props) {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex flex-col leading-tight">
-              <span className="text-2xl font-title font-bold text-zinco">
-                Dra. Thainá
+              <span className="text-xl font-title font-bold text-zinco">
+                Dra Thainá Carvalho
               </span>
-              <span className="text-[10px] tracking-[0.2em] font-body text-gold uppercase font-semibold">
-                Clínica Estética
+              <span className="text-[9px] tracking-[0.2em] font-body text-gold uppercase font-semibold">
+                HARMONIZAÇÃO FACIAL E CORPORAL
               </span>
             </Link>
           </div>

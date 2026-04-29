@@ -178,7 +178,7 @@ export default function Home() {
                     <h4 className="text-xl md:text-2xl font-title font-bold text-zinco group-hover:text-gold transition-colors">{proc.name}</h4>
                     <span className={`text-gold transition-transform duration-300 ${expandedProc === idx ? 'rotate-180' : ''}`}><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></span>
                   </button>
-                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedProc === idx ? 'max-h-[500px] pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedProc === idx ? 'max-h-[800px] pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
                     <p className="text-lg text-zinco/70 font-body leading-relaxed mb-6">{proc.desc}</p>
                     <Link href="#contato" className="inline-flex items-center space-x-2 text-gold font-bold uppercase tracking-widest text-xs hover:gap-4 transition-all">
                       <span>Agendar este procedimento</span>
@@ -250,11 +250,11 @@ export default function Home() {
         </div>
         <div className="max-w-3xl mx-auto space-y-6">
           {[
-            { q: "Os procedimentos são dolorosos?", a: "Priorizamos o seu conforto máximo..." },
-            { q: "Quanto tempo dura o resultado do Botox?", a: "A duração do Botox varia entre 4 a 6 meses..." },
-            { q: "O resultado fica artificial?", a: "Pelo contrário. Nossa filosofia é a 'Beleza Natural'..." },
-            { q: "Posso voltar à minha rotina no mesmo dia?", a: "Sim, a maioria dos nossos procedimentos permite..." },
-            { q: "Como funciona a avaliação de valores?", a: "Avaliamos cada rosto de forma única..." }
+            { q: "Os procedimentos são dolorosos?", a: "Priorizamos o seu conforto máximo através de técnicas avançadas e anestésicos tópicos de alta eficácia." },
+            { q: "Quanto tempo dura o resultado do Botox?", a: "A duração do Botox varia entre 4 a 6 meses, dependendo do metabolismo de cada paciente." },
+            { q: "O resultado fica artificial?", a: "Pelo contrário. Nossa filosofia é a 'Beleza Natural', focando em realçar traços sem mudar sua essência." },
+            { q: "Posso voltar à minha rotina no mesmo dia?", a: "Sim, a maioria dos nossos procedimentos permite o retorno imediato às atividades, seguindo orientações básicas." },
+            { q: "Como funciona a avaliação de valores?", a: "Avaliamos cada rosto de forma única para propor um plano de tratamento personalizado e justo." }
           ].map((faq, idx) => (
             <div key={idx} className="bg-white rounded-[2rem] shadow-lg border border-gold/5 overflow-hidden transition-all duration-300">
               <button onClick={() => setActiveFaq(activeFaq === idx ? null : idx)} className="w-full flex items-center justify-between p-8 text-left group">
@@ -328,7 +328,7 @@ export default function Home() {
       <footer className="bg-zinco text-soft-beige pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="flex flex-col space-y-6">
-            <h3 className="text-2xl font-title font-bold text-white">Dra. Thainá Carvalho</h3>
+            <h3 className="text-2xl font-title font-bold text-white">Dra. Thainá Carvalho <br /><span className="text-gold text-xs uppercase tracking-widest">Harmonização Facial e Corporal</span></h3>
             <p className="text-soft-beige/60 font-body leading-relaxed">Realçando a sua beleza natural com ciência, segurança e muito cuidado em cada detalhe.</p>
             <div className="flex space-x-4">
               <Link href={INSTAGRAM_LINK} target="_blank" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors">
@@ -399,30 +399,30 @@ export default function Home() {
 }
 
 const proceduresData = [
-  { niche: "facial", name: "Harmonização Facial Full Face", desc: "Planejamento completo para equilíbrio e proporção facial, com resultado natural e sofisticado..." },
-  { niche: "facial", name: "Toxina Botulínica (Botox Full Face)", desc: "Suaviza linhas de expressão e previne rugas..." },
-  { niche: "facial", name: "Preenchimento com Ácido Hialurônico", desc: "Restaura volume, contorno e hidratação da pele..." },
-  { niche: "facial", name: "Contorno Mandibular e Mento", desc: "Define o ângulo da face..." },
-  { niche: "facial", name: "Escultura Labial", desc: "Realce dos lábios com proporção, hidratação..." },
-  { niche: "facial", name: "Rinomodelação com Ácido Hialurônico", desc: "Correção estética do nariz sem cirurgia..." },
-  { niche: "facial", name: "Lipo Enzimática de Papada", desc: "Redução da gordura localizada abaixo do queixo..." },
-  { niche: "pele", name: "Bioestimuladores de Colágeno", desc: "Estimula a produção natural de colágeno..." },
-  { niche: "pele", name: "Skinbooster (hidratação profunda)", desc: "Hidratação intensa que melhora textura..." },
-  { niche: "pele", name: "Bioestimulação com Fios de PDO", desc: "Estimula colágeno e promove efeito regenerador..." },
-  { niche: "pele", name: "Lifting com Fios de Sustentação", desc: "Reposicionamento dos tecidos..." },
-  { niche: "pele", name: "Peelings Químicos Personalizados", desc: "Renovação da pele, melhora manchas..." },
-  { niche: "pele", name: "Microagulhamento Facial", desc: "Estimula colágeno e trata cicatrizes..." },
-  { niche: "pele", name: "Protocolos para Acne e Cicatrizes", desc: "Tratamentos personalizados para controle da acne..." },
-  { niche: "pele", name: "Limpeza de Pele Premium", desc: "Higienização profunda com cuidado e técnica..." },
-  { niche: "pele", name: "Intradermoterapia Capilar", desc: "Tratamento para fortalecimento..." },
-  { niche: "pele", name: "Microagulhamento Capilar", desc: "Estimula o couro cabeludo..." },
-  { niche: "corporal", name: "Harmonização Corporal", desc: "Planejamento completo para melhorar contorno..." },
-  { niche: "corporal", name: "Harmonização Glútea", desc: "Realce do volume e contorno dos glúteos..." },
-  { niche: "corporal", name: "Bioestimuladores Corporais", desc: "Melhora da firmeza e qualidade da pele..." },
-  { niche: "corporal", name: "Aplicações para Gordura Localizada", desc: "Redução de medidas..." },
-  { niche: "corporal", name: "Intradermoterapia Corporal", desc: "Tratamento para celulite, estrias..." },
-  { niche: "corporal", name: "Skinbooster Corporal", desc: "Hidratação profunda e melhora da qualidade..." },
-  { niche: "corporal", name: "Drenagem Linfática", desc: "Redução de inchaço..." },
-  { niche: "corporal", name: "Massagem Modeladora", desc: "Auxilia na definição corporal..." },
-  { niche: "corporal", name: "Depilação a Laser", desc: "Tecnologia avançada para redução progressiva..." }
+  { niche: "facial", name: "Harmonização Facial Full Face", desc: "Planejamento completo para equilíbrio e proporção facial, com resultado natural e sofisticado. Pode associar toxina botulínica, preenchimento com ácido hialurônico, bioestimuladores e fios, visando equilíbrio, proporção e rejuvenescimento global." },
+  { niche: "facial", name: "Toxina Botulínica (Botox Full Face)", desc: "Suaviza linhas de expressão e previne rugas, mantendo leveza e naturalidade." },
+  { niche: "facial", name: "Preenchimento com Ácido Hialurônico", desc: "Restaura volume, contorno e hidratação da pele de forma harmônica." },
+  { niche: "facial", name: "Contorno Mandibular e Mento", desc: "Define o ângulo da face, proporcionando mais estrutura e elegância." },
+  { niche: "facial", name: "Escultura Labial", desc: "Realce dos lábios com proporção, hidratação e naturalidade." },
+  { niche: "facial", name: "Rinomodelação com Ácido Hialurônico", desc: "Correção estética do nariz sem cirurgia, com resultado imediato." },
+  { niche: "facial", name: "Lipo Enzimática de Papada", desc: "Redução da gordura localizada abaixo do queixo, melhorando o contorno facial." },
+  { niche: "pele", name: "Bioestimuladores de Colágeno", desc: "Estimula a produção natural de colágeno, melhorando firmeza e qualidade da pele." },
+  { niche: "pele", name: "Skinbooster (hidratação profunda)", desc: "Hidratação intensa que melhora textura, viço e elasticidade da pele." },
+  { niche: "pele", name: "Bioestimulação com Fios de PDO", desc: "Estimula colágeno e promove efeito regenerador na pele." },
+  { niche: "pele", name: "Lifting com Fios de Sustentação", desc: "Reposicionamento dos tecidos com efeito lifting sem cirurgia." },
+  { niche: "pele", name: "Peelings Químicos Personalizados", desc: "Renovação da pele, melhora manchas, textura e luminosidade." },
+  { niche: "pele", name: "Microagulhamento Facial", desc: "Estimula colágeno e trata cicatrizes, poros e textura da pele." },
+  { niche: "pele", name: "Protocolos para Acne e Cicatrizes", desc: "Tratamentos personalizados para controle da acne e melhora das marcas." },
+  { niche: "pele", name: "Limpeza de Pele Premium", desc: "Higienização profunda com cuidado e técnica para uma pele saudável." },
+  { niche: "pele", name: "Intradermoterapia Capilar", desc: "Tratamento para fortalecimento e crescimento capilar." },
+  { niche: "pele", name: "Microagulhamento Capilar", desc: "Estimula o couro cabeludo, auxiliando no combate à queda capilar." },
+  { niche: "corporal", name: "Harmonização Corporal", desc: "Planejamento completo para melhorar contorno e proporções corporais." },
+  { niche: "corporal", name: "Harmonização Glútea", desc: "Realce do volume e contorno dos glúteos com naturalidade. Planejamento completo que pode associar bioestimuladores de colágeno, técnicas de volumização e contorno, além de protocolos complementares como intradermoterapia corporal, tratamentos para celulite e flacidez e estímulo da qualidade da pele. Indicado para melhorar o formato, projetar o volume, aumentar a firmeza e proporcionar um contorno mais harmônico e natural dos glúteos." },
+  { niche: "corporal", name: "Bioestimuladores Corporais", desc: "Melhora da firmeza e qualidade da pele em diversas regiões do corpo." },
+  { niche: "corporal", name: "Aplicações para Gordura Localizada", desc: "Redução de medidas com protocolos personalizados." },
+  { niche: "corporal", name: "Intradermoterapia Corporal", desc: "Tratamento para celulite, estrias e flacidez." },
+  { niche: "corporal", name: "Skinbooster Corporal", desc: "Hidratação profunda e melhora da qualidade da pele corporal." },
+  { niche: "corporal", name: "Drenagem Linfática", desc: "Redução de inchaço e melhora da circulação." },
+  { niche: "corporal", name: "Massagem Modeladora", desc: "Auxilia na definição corporal e melhora do contorno." },
+  { niche: "corporal", name: "Depilação a Laser", desc: "Tecnologia avançada para redução progressiva dos pelos, proporcionando mais conforto, praticidade e melhora da qualidade da pele. Indicado para diversas regiões do corpo, with resultados duradouros e seguros." }
 ];
