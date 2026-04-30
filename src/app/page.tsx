@@ -16,6 +16,10 @@ import facialProc from "../../styles/imagens/FacialProcedimento.jpeg";
 import rejuvProc from "../../styles/imagens/RejuvProcedimento.jpeg";
 import corporalProc from "../../styles/imagens/ProcedimentoCorporal.jpeg";
 
+// CMS Imports
+import { client } from "../sanity/lib/client";
+import { proceduresQuery, testimonialsQuery, siteConfigQuery } from "../sanity/lib/queries";
+
 const WHATSAPP_LINK = "https://wa.me/5511951266988?text=Ol%C3%A1%2C%20Dra.%20Thain%C3%A1!%20Vi%20seu%20site%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20para%20conhecer%20melhor%20os%20procedimentos.%20Como%20funciona%20o%20seu%20atendimento%3F";
 const INSTAGRAM_LINK = "https://instagram.com/thainacarvalhofisio";
 const EMAIL = "thaina.cardoso.carvalho@gmail.com";
@@ -27,7 +31,47 @@ export default function Home() {
   const [expandedProc, setExpandedProc] = useState<number | null>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
+  // CMS Data States
+  const [procedures, setProcedures] = useState<any[]>(proceduresData);
+  const [testimonials, setTestimonials] = useState<any[]>(testimonialsData);
+  const [siteConfig, setSiteConfig] = useState<any>({
+    whatsapp: WHATSAPP_LINK,
+    instagram: INSTAGRAM_LINK,
+    email: EMAIL,
+    address: ADDRESS
+  });
+
   useEffect(() => {
+    // Fetch CMS Data
+    const fetchData = async () => {
+      try {
+        const cmsProcedures = await client.fetch(proceduresQuery);
+        if (cmsProcedures?.length > 0) {
+          // Merge CMS procedures with hardcoded ones, avoiding duplicates by name
+          setProcedures((prev) => [
+            ...cmsProcedures,
+            ...proceduresData.filter(p => !cmsProcedures.some((cp: any) => cp.name === p.name))
+          ]);
+        }
+
+        const cmsTestimonials = await client.fetch(testimonialsQuery);
+        if (cmsTestimonials?.length > 0) {
+          // Merge CMS testimonials
+          setTestimonials((prev) => [
+            ...cmsTestimonials,
+            ...testimonialsData.filter(t => !cmsTestimonials.some((ct: any) => ct.name === t.name))
+          ]);
+        }
+
+        const cmsConfig = await client.fetch(siteConfigQuery);
+        if (cmsConfig) setSiteConfig((prev: any) => ({ ...prev, ...cmsConfig }));
+      } catch (error) {
+        console.error("CMS Fetch error:", error);
+      }
+    };
+
+    fetchData();
+
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
 
@@ -80,13 +124,25 @@ export default function Home() {
             </div>
 
             <h1 className="text-5xl lg:text-7xl font-title font-bold text-zinco leading-[1.1]">
-              Realce sua Melhor <br /> Versão. <br />
-              <span className="text-gold italic">Resultados Naturais,</span> <br /> Avaliações personalizadas.
+              {siteConfig.heroTitle ? (
+                siteConfig.heroTitle.split('\n').map((line: string, i: number) => (
+                  <span key={i}>{line}<br /></span>
+                ))
+              ) : (
+                <>Realce sua Melhor <br /> Versão. <br />
+                <span className="text-gold italic">Resultados Naturais,</span> <br /> Avaliações personalizadas.</>
+              )}
             </h1>
 
             <div className="space-y-6 text-lg text-zinco/70 font-body max-w-xl leading-relaxed">
-              <p>Especialista em Dermatofuncional e Cosmetologia, com atuação em harmonização facial e corporal, rejuvenescimento e tratamentos estéticos avançados com abordagem personalizada para resultados naturais e equilibrados, unindo ciência, técnica e sofisticação.</p>
-              <p>Atendimento individualizado, com foco na sua essência — sem exageros, apenas realçando o que você já tem de melhor.</p>
+              {siteConfig.heroSubtitle ? (
+                <p>{siteConfig.heroSubtitle}</p>
+              ) : (
+                <>
+                  <p>Especialista em Dermatofuncional e Cosmetologia, com atuação em harmonização facial e corporal, rejuvenescimento e tratamentos estéticos avançados com abordagem personalizada para resultados naturais e equilibrados, unindo ciência, técnica e sofisticação.</p>
+                  <p>Atendimento individualizado, com foco na sua essência — sem exageros, apenas realçando o que você já tem de melhor.</p>
+                </>
+              )}
               <div className="pt-2">
                 <p className="font-title font-bold text-xl text-zinco">Dra Thainá Carvalho</p>
                 <p className="text-gold font-bold tracking-widest text-xs uppercase">CREFITO 3 351518-F</p>
@@ -94,7 +150,7 @@ export default function Home() {
             </div>
 
             <div className="pt-4">
-              <Link href="#contato" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 font-body">
+              <Link href={siteConfig.whatsapp} target="_blank" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 font-body">
                 <span>Quero Agendar Minha Avaliação</span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -158,11 +214,10 @@ export default function Home() {
                     const el = document.getElementById('lista-procedimentos');
                     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
-                  className={`flex-1 py-6 px-4 rounded-2xl transition-all duration-500 font-bold uppercase tracking-[0.2em] text-xs border-2 ${
-                    activeNiche === niche
+                  className={`flex-1 py-6 px-4 rounded-2xl transition-all duration-500 font-bold uppercase tracking-[0.2em] text-xs border-2 ${activeNiche === niche
                       ? 'bg-gold text-white border-gold shadow-xl scale-105'
                       : 'bg-white/50 text-zinco/50 border-gold/10 hover:border-gold/30'
-                  }`}
+                    }`}
                 >
                   {niche === 'facial' ? 'Harmonização Facial' : niche === 'pele' ? 'Pele & Rejuvenescimento' : 'Tratamentos Corporais'}
                 </button>
@@ -172,7 +227,7 @@ export default function Home() {
 
           <div id="lista-procedimentos" className="max-w-4xl mx-auto bg-white/50 backdrop-blur-sm rounded-[3rem] p-8 md:p-12 shadow-2xl border border-gold/10">
             <div className="space-y-4">
-              {proceduresData.filter(p => p.niche === activeNiche).map((proc, idx) => (
+              {procedures.filter(p => p.niche === activeNiche).map((proc, idx) => (
                 <div key={idx} className="border-b border-gold/10 last:border-0">
                   <button onClick={() => setExpandedProc(expandedProc === idx ? null : idx)} className="w-full flex items-center justify-between py-6 group text-left">
                     <h4 className="text-xl md:text-2xl font-title font-bold text-zinco group-hover:text-gold transition-colors text-left flex-1 pr-4">{proc.name}</h4>
@@ -228,13 +283,10 @@ export default function Home() {
           <h2 className="text-4xl lg:text-6xl font-title font-bold text-zinco">O Que Nossos <span className="text-gold italic font-medium">Pacientes Dizem</span></h2>
         </div>
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          {[
-            { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria: natural e elegante. Minha autoestima mudou completamente!" },
-            { name: "Rubinho", role: "Paciente", image: rubinho, text: "Ficou ótimo, bem discreto, ninguém percebeu que fiz, só falaram que fiquei com a aparência mais descansada. Era exatamente isso que eu queria!" }
-          ].map((testimonial, idx) => (
+          {testimonials.map((testimonial, idx) => (
             <div key={idx} className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-gold/5 flex flex-col relative group hover:shadow-2xl transition-all duration-300">
               <div className="flex space-x-1 mb-6 text-gold">
-                {[...Array(5)].map((_, i) => ( <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> ))}
+                {[...Array(5)].map((_, i) => (<svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>))}
               </div>
               <p className="text-zinco/70 italic font-body text-lg leading-relaxed mb-8 flex-grow">"{testimonial.text}"</p>
               <div className="flex items-center space-x-4">
@@ -281,31 +333,31 @@ export default function Home() {
               <span className="inline-block bg-gold/10 text-gold text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest self-start">Dê o Próximo Passo</span>
               <h2 className="text-4xl lg:text-6xl font-title font-bold text-zinco leading-tight">Pronta para sua <br /><span className="text-gold italic">Melhor Versão?</span></h2>
               <p className="text-lg text-zinco/70 font-body leading-relaxed max-w-md">Entre em contato diretamente comigo. Estou à disposição para esclarecer suas dúvidas e reservar o melhor horário para sua avaliação personalizada.</p>
-              <Link href={WHATSAPP_LINK} target="_blank" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all shadow-xl hover:shadow-2xl self-start">
+              <Link href={siteConfig.whatsapp} target="_blank" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all shadow-xl hover:shadow-2xl self-start">
                 <span>Agendar via WhatsApp</span>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.941-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.013c.105.007.246-.04.384.281.144.332.491 1.197.534 1.284.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.101-.177.211-.077.383.101.173.443.729.947 1.177.65.58 1.196.761 1.369.847.173.087.275.072.375-.043s.433-.505.548-.678c.115-.173.231-.144.39-.087.159.058 1.011.477 1.184.564s.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.941-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.013c.105.007.246-.04.384.281.144.332.491 1.197.534 1.284.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.101-.177.211-.077.383.101.173.443.729.947 1.177.65.58 1.196.761 1.369.847.173.087.275.072.375-.043s.433-.505.548-.678c.115-.173.231-.144.39-.087.159.058 1.011.477 1.184.564s.289.13.332.202c.045.072.045.419-.1.824z" /></svg>
               </Link>
               <div className="pt-8 border-t border-gold/10">
                 <p className="text-xs font-bold text-zinco uppercase tracking-widest mb-4">Acompanhe Nossas Redes</p>
-                <Link href={INSTAGRAM_LINK} target="_blank" className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all shadow-sm">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.562.477-.96.896-1.382.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.277.059-2.148.262-2.911.558-.788.306-1.457.715-2.123 1.381s-1.075 1.335-1.381 2.123c-.295.763-.499 1.634-.558 2.911-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.059 1.277.262 2.148.558 2.911.306.788.715 1.457 1.381 2.123s1.335 1.075 2.123 1.381c.763.295 1.634.499 2.911.558 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.277-.059 2.148-.262 2.911-.558.788-.306 1.457-.715 2.123-1.381s1.075-1.335 1.381-2.123c.295-.763.499-1.634.558-2.911.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.059-1.277-.262-2.148-.558-2.911-.306-.788-.715-1.457-1.381-2.123s-1.335-1.075-2.123-1.381c-.763-.295-1.634-.499-2.911-.558-1.28-.058-1.688-.072-4.947-.072zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <Link href={siteConfig.instagram} target="_blank" className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all shadow-sm">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.562.477-.96.896-1.382.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.277.059-2.148.262-2.911.558-.788.306-1.457.715-2.123 1.381s-1.075 1.335-1.381 2.123c-.295.763-.499 1.634-.558 2.911-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.059 1.277.262 2.148.558 2.911.306.788.715 1.457 1.381 2.123s1.335 1.075 2.123 1.381c.763.295 1.634.499 2.911.558 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.277-.059 2.148-.262 2.911-.558.788-.306 1.457-.715 2.123-1.381s1.075-1.335 1.381-2.123c.295-.763.499-1.634.558-2.911.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.059-1.277-.262-2.148-.558-2.911-.306-.788-.715-1.457-1.381-2.123s-1.335-1.075-2.123-1.381c-.763-.295-1.634-.499-2.911-.558-1.28-.058-1.688-.072-4.947-.072zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
                 </Link>
               </div>
             </div>
             <div className="bg-soft-beige/30 backdrop-blur-sm p-6 lg:p-10 rounded-[3rem] border-2 border-gold/40 space-y-8 lg:space-y-10 shadow-inner">
               <div className="flex space-x-4 lg:space-x-6">
                 <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 </div>
                 <div>
                   <h3 className="font-title font-bold text-zinco text-lg lg:text-xl">Nosso Endereço</h3>
-                  <p className="text-zinco/60 font-body text-sm lg:text-base">{ADDRESS}</p>
+                  <p className="text-zinco/60 font-body text-sm lg:text-base">{siteConfig.address}</p>
                 </div>
               </div>
 
               <div className="flex space-x-4 lg:space-x-6">
                 <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
                 <div>
                   <h3 className="font-title font-bold text-zinco text-lg lg:text-xl">Horário de Atendimento</h3>
@@ -315,11 +367,11 @@ export default function Home() {
 
               <div className="flex space-x-4 lg:space-x-6">
                 <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                 </div>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-title font-bold text-zinco text-lg lg:text-xl">Contato Direto</h3>
-                  <p className="text-zinco/60 font-body text-sm lg:text-base break-all lg:break-normal">(11) 95126-6988<br />{EMAIL}</p>
+                  <p className="text-zinco/60 font-body text-sm lg:text-base break-all lg:break-normal">(11) 95126-6988<br />{siteConfig.email}</p>
                 </div>
               </div>
 
@@ -337,8 +389,8 @@ export default function Home() {
             <h3 className="text-2xl font-title font-bold text-white">Dra. Thainá Carvalho <br /><span className="text-gold text-xs uppercase tracking-widest">Harmonização Facial e Corporal</span></h3>
             <p className="text-soft-beige/60 font-body leading-relaxed">Realçando a sua beleza natural com ciência, segurança e muito cuidado em cada detalhe.</p>
             <div className="flex space-x-4">
-              <Link href={INSTAGRAM_LINK} target="_blank" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.562.477-.96.896-1.382.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.277.059-2.148.262-2.911.558-.788.306-1.457.715-2.123 1.381s-1.075 1.335-1.381 2.123c-.295.763-.499 1.634-.558 2.911-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.059 1.277.262 2.148.558 2.911.306.788.715 1.457 1.381 2.123s1.335 1.075 2.123 1.381c.763.295 1.634.499 2.911.558 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.277-.059 2.148-.262 2.911-.558.788-.306 1.457-.715 2.123-1.381s1.075-1.335 1.381-2.123c.295-.763.499-1.634.558-2.911.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.059-1.277-.262-2.148-.558-2.911-.306-.788-.715-1.457-1.381-2.123s-1.335-1.075-2.123-1.381c-.763-.295-1.634-.499-2.911-.558-1.28-.058-1.688-.072-4.947-.072zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <Link href={siteConfig.instagram} target="_blank" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.562.477-.96.896-1.382.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.277.059-2.148.262-2.911.558-.788.306-1.457.715-2.123 1.381s-1.075 1.335-1.381 2.123c-.295.763-.499 1.634-.558 2.911-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.059 1.277.262 2.148.558 2.911.306.788.715 1.457 1.381 2.123s1.335 1.075 2.123 1.381c.763.295 1.634.499 2.911.558 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.277-.059 2.148-.262 2.911-.558.788-.306 1.457-.715 2.123-1.381s1.075-1.335 1.381-2.123c.295-.763.499-1.634.558-2.911.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.059-1.277-.262-2.148-.558-2.911-.306-.788-.715-1.457-1.381-2.123s-1.335-1.075-2.123-1.381c-.763-.295-1.634-.499-2.911-.558-1.28-.058-1.688-.072-4.947-.072zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
               </Link>
             </div>
           </div>
@@ -382,16 +434,16 @@ export default function Home() {
             <h4 className="text-white font-title font-bold text-lg mb-6 uppercase tracking-widest">Contato</h4>
             <ul className="space-y-6 font-body">
               <li className="flex items-start space-x-4">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                <span className="text-soft-beige/60 text-sm leading-relaxed">{ADDRESS}</span>
+                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <span className="text-soft-beige/60 text-sm leading-relaxed">{siteConfig.address}</span>
               </li>
               <li className="flex items-center space-x-4">
-                <svg className="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                <svg className="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                 <span className="text-soft-beige/60 text-sm">(11) 95126-6988</span>
               </li>
               <li className="flex items-center space-x-4">
-                <svg className="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                <span className="text-soft-beige/60 text-sm truncate">{EMAIL}</span>
+                <svg className="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                <span className="text-soft-beige/60 text-sm truncate">{siteConfig.email}</span>
               </li>
             </ul>
           </div>
@@ -440,4 +492,9 @@ const proceduresData = [
   { niche: "corporal", name: "Drenagem Linfática", desc: "Redução de inchaço e melhora da circulação." },
   { niche: "corporal", name: "Massagem Modeladora", desc: "Auxilia na definição corporal e melhora do contorno." },
   { niche: "corporal", name: "Depilação a Laser", desc: "Tecnologia avançada para redução progressiva dos pelos, proporcionando mais conforto, praticidade e melhora da qualidade da pele. Indicado para diversas regiões do corpo, with resultados duradouros e seguros." }
+];
+
+const testimonialsData = [
+  { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria: natural e elegante. Minha autoestima mudou completamente!" },
+  { name: "Rubinho", role: "Paciente", image: rubinho, text: "Ficou ótimo, bem discreto, ninguém percebeu que fiz, só falaram que fiquei com a aparência mais descansada. Era exatamente isso que eu queria!" }
 ];
