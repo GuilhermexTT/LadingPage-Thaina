@@ -18,9 +18,9 @@ import corporalProc from "../../styles/imagens/ProcedimentoCorporal.jpeg";
 
 // CMS Imports
 import { client } from "../sanity/lib/client";
-import { proceduresQuery, testimonialsQuery, siteConfigQuery } from "../sanity/lib/queries";
+import { proceduresQuery, testimonialsQuery, siteConfigQuery, resultsQuery } from "../sanity/lib/queries";
 
-const WHATSAPP_LINK = "https://wa.me/5511951266988?text=Ol%C3%A1%2C%20Dra.%20Thain%C3%A1!%20Vi%20seu%20site%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20para%20conhecer%20melhor%20os%20procedimentos.%20Como%20funciona%20o%20seu%20atendimento%3F";
+const WHATSAPP_LINK = "https://wa.me/5511951266988?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20para%20conhecer%20melhor%20os%20procedimentos.";
 const INSTAGRAM_LINK = "https://instagram.com/thainacarvalhofisio";
 const EMAIL = "thaina.cardoso.carvalho@gmail.com";
 const ADDRESS = "Pátio Osasco - torre 2 - sala 211, Osasco, São Paulo";
@@ -30,10 +30,12 @@ export default function Home() {
   const [activeNiche, setActiveNiche] = useState("facial");
   const [expandedProc, setExpandedProc] = useState<number | null>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [selectedImage, setSelectedImage] = useState<any>(null);
 
   // CMS Data States
   const [procedures, setProcedures] = useState<any[]>(proceduresData);
   const [testimonials, setTestimonials] = useState<any[]>(testimonialsData);
+  const [results, setResults] = useState<any[]>(resultsData);
   const [siteConfig, setSiteConfig] = useState<any>({
     whatsapp: WHATSAPP_LINK,
     instagram: INSTAGRAM_LINK,
@@ -60,6 +62,14 @@ export default function Home() {
           setTestimonials((prev) => [
             ...cmsTestimonials,
             ...testimonialsData.filter(t => !cmsTestimonials.some((ct: any) => ct.name === t.name))
+          ]);
+        }
+
+        const cmsResults = await client.fetch(resultsQuery);
+        if (cmsResults?.length > 0) {
+          setResults((prev) => [
+            ...cmsResults,
+            ...resultsData.filter(r => !cmsResults.some((cr: any) => cr.title === r.title))
           ]);
         }
 
@@ -97,6 +107,14 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedImage(null);
+    };
+    if (selectedImage) window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImage]);
+
   return (
     <main className="relative overflow-x-hidden">
       <Navbar scrolled={scrolled} />
@@ -130,7 +148,7 @@ export default function Home() {
                 ))
               ) : (
                 <>Realce sua Melhor <br /> Versão. <br />
-                <span className="text-gold italic">Resultados Naturais,</span> <br /> Avaliações personalizadas.</>
+                  <span className="text-gold italic">Resultados Naturais,</span> <br /> Avaliações personalizadas.</>
               )}
             </h1>
 
@@ -150,7 +168,7 @@ export default function Home() {
             </div>
 
             <div className="pt-4">
-              <Link href={siteConfig.whatsapp} target="_blank" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 font-body">
+              <Link href={siteConfig.whatsapp} target="_blank" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-title font-bold transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
                 <span>Quero Agendar Minha Avaliação</span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -214,9 +232,9 @@ export default function Home() {
                     const el = document.getElementById('lista-procedimentos');
                     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
-                  className={`flex-1 py-6 px-4 rounded-2xl transition-all duration-500 font-bold uppercase tracking-[0.2em] text-xs border-2 ${activeNiche === niche
-                      ? 'bg-gold text-white border-gold shadow-xl scale-105'
-                      : 'bg-white/50 text-zinco/50 border-gold/10 hover:border-gold/30'
+                  className={`flex-1 py-6 px-4 rounded-2xl transition-all duration-500 font-title font-bold uppercase tracking-[0.2em] text-xs border-2 ${activeNiche === niche
+                    ? 'bg-gold text-white border-gold shadow-xl scale-105'
+                    : 'bg-white/50 text-zinco/50 border-gold/10 hover:border-gold/30'
                     }`}
                 >
                   {niche === 'facial' ? 'Harmonização Facial' : niche === 'pele' ? 'Pele & Rejuvenescimento' : 'Tratamentos Corporais'}
@@ -235,7 +253,7 @@ export default function Home() {
                   </button>
                   <div className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedProc === idx ? 'max-h-[800px] pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
                     <p className="text-lg text-zinco/70 font-body leading-relaxed mb-6">{proc.desc}</p>
-                    <Link href="#contato" className="inline-flex items-center space-x-2 text-gold font-bold uppercase tracking-widest text-xs hover:gap-4 transition-all">
+                    <Link href="#contato" className="inline-flex items-center space-x-2 text-gold font-title font-bold uppercase tracking-widest text-xs hover:gap-4 transition-all">
                       <span>Agendar este procedimento</span>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
                     </Link>
@@ -260,15 +278,16 @@ export default function Home() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { title: "Preenchimento Labial", image: labios, badge: "Antes e Depois" },
-            { title: "Rejuvenescimento Facial", image: rejuvenescimento2, badge: "Antes e Depois" },
-            { title: "Botox Global", image: pacienteBotox, badge: "Antes e Depois" }
-          ].map((result, idx) => (
-            <div key={idx} className="relative group aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
+          {results.map((result, idx) => (
+            <div key={idx} onClick={() => setSelectedImage(result)} className="relative group aspect-square rounded-[2rem] overflow-hidden shadow-2xl cursor-pointer">
               <Image src={result.image} alt={result.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-zinco/80 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-              <div className="absolute bottom-0 left-0 right-0 p-8">
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <div className="bg-gold/90 text-white rounded-full p-4 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
                 <span className="inline-block bg-gold text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">{result.badge}</span>
                 <h3 className="text-2xl font-title font-bold text-white">{result.title}</h3>
               </div>
@@ -333,9 +352,9 @@ export default function Home() {
               <span className="inline-block bg-gold/10 text-gold text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest self-start">Dê o Próximo Passo</span>
               <h2 className="text-4xl lg:text-6xl font-title font-bold text-zinco leading-tight">Pronta para sua <br /><span className="text-gold italic">Melhor Versão?</span></h2>
               <p className="text-lg text-zinco/70 font-body leading-relaxed max-w-md">Entre em contato diretamente comigo. Estou à disposição para esclarecer suas dúvidas e reservar o melhor horário para sua avaliação personalizada.</p>
-              <Link href={siteConfig.whatsapp} target="_blank" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all shadow-xl hover:shadow-2xl self-start">
+              <Link href={siteConfig.whatsapp} target="_blank" className="inline-flex items-center space-x-3 bg-gold hover:bg-gold/90 text-white px-10 py-5 rounded-xl text-lg font-title font-bold transition-all shadow-xl hover:shadow-2xl self-start">
                 <span>Agendar via WhatsApp</span>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.941-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.013c.105.007.246-.04.384.281.144.332.491 1.197.534 1.284.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.101-.177.211-.077.383.101.173.443.729.947 1.177.65.58 1.196.761 1.369.847.173.087.275.072.375-.043s.433-.505.548-.678c.115-.173.231-.144.39-.087.159.058 1.011.477 1.184.564s.289.13.332.202c.045.072.045.419-.1.824z" /></svg>
+                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.941-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.006.332.013c.105.007.246-.04.384.281.144.332.491 1.197.534 1.284.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.101-.177.211-.077.383.101.173.443.729.947 1.177.65.58 1.196.761 1.369.847.173.087.275.072.375-.043s.433-.505.548-.678c.115-.173.231-.144.39-.087.159.058 1.011.477 1.184.564s.289.13.332.202c.045.072.045.419-.1.824z" /></svg>
               </Link>
               <div className="pt-8 border-t border-gold/10">
                 <p className="text-xs font-bold text-zinco uppercase tracking-widest mb-4">Acompanhe Nossas Redes</p>
@@ -383,11 +402,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Image Modal */}
+      {selectedImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 sm:p-8 backdrop-blur-sm transition-opacity" onClick={() => setSelectedImage(null)}>
+          <button 
+            className="absolute top-4 right-4 sm:top-8 sm:right-8 text-white/70 hover:text-white transition-colors z-[60] bg-black/50 hover:bg-gold p-2 rounded-full"
+            onClick={() => setSelectedImage(null)}
+            aria-label="Fechar"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="relative w-full max-w-5xl h-[80vh] flex flex-col items-center justify-center animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+            <div className="relative w-full h-full rounded-2xl overflow-hidden">
+              <Image src={selectedImage.image} alt={selectedImage.title} fill className="object-contain" />
+            </div>
+            <h3 className="text-white text-2xl font-title font-bold mt-6">{selectedImage.title}</h3>
+          </div>
+        </div>
+      )}
+
       <footer className="bg-zinco text-soft-beige pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="flex flex-col space-y-6">
-            <h3 className="text-2xl font-title font-bold text-white">Dra. Thainá Carvalho <br /><span className="text-gold text-xs uppercase tracking-widest">Harmonização Facial e Corporal</span></h3>
-            <p className="text-soft-beige/60 font-body leading-relaxed">Realçando a sua beleza natural com ciência, segurança e muito cuidado em cada detalhe.</p>
+            <h3 className="text-2xl font-title font-bold text-white">Dra. Thainá Carvalho <br /><span className="text-gold text-xs uppercase tracking-widest block mt-1">Harmonização Facial e Corporal</span><span className="font-body font-bold text-gold/60 text-xs uppercase tracking-widest block mt-1">CREFITO 3 351518-F</span></h3>
+            <p className="text-soft-beige/60 font-body text-sm leading-relaxed">Este conteúdo tem caráter informativo. Procedimentos estéticos devem ser realizados após avaliação profissional. Os resultados podem variar de acordo com cada paciente.</p>
             <div className="flex space-x-4">
               <Link href={siteConfig.instagram} target="_blank" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.562.477-.96.896-1.382.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.277.059-2.148.262-2.911.558-.788.306-1.457.715-2.123 1.381s-1.075 1.335-1.381 2.123c-.295.763-.499 1.634-.558 2.911-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.059 1.277.262 2.148.558 2.911.306.788.715 1.457 1.381 2.123s1.335 1.075 2.123 1.381c.763.295 1.634.499 2.911.558 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.277-.059 2.148-.262 2.911-.558.788-.306 1.457-.715 2.123-1.381s1.075-1.335 1.381-2.123c.295-.763.499-1.634.558-2.911.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.059-1.277-.262-2.148-.558-2.911-.306-.788-.715-1.457-1.381-2.123s-1.335-1.075-2.123-1.381c-.763-.295-1.634-.499-2.911-.558-1.28-.058-1.688-.072-4.947-.072zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
@@ -452,7 +492,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-soft-beige/40 text-[10px] uppercase tracking-[0.2em]">
           <div className="flex flex-col items-center md:items-start space-y-2">
             <p>© 2024 Dra. Thainá Carvalho. Todos os direitos reservados.</p>
-            <p className="font-bold text-gold/60">CREFITO 3 351518-F</p>
+            <p className="font-body font-bold text-gold/60 text-xs tracking-widest">CREFITO 3 351518-F</p>
           </div>
           <div className="flex space-x-8">
             <Link href="/privacidade" className="hover:text-gold transition-colors">Política de Privacidade</Link>
@@ -497,4 +537,10 @@ const proceduresData = [
 const testimonialsData = [
   { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria: natural e elegante. Minha autoestima mudou completamente!" },
   { name: "Rubinho", role: "Paciente", image: rubinho, text: "Ficou ótimo, bem discreto, ninguém percebeu que fiz, só falaram que fiquei com a aparência mais descansada. Era exatamente isso que eu queria!" }
+];
+
+const resultsData = [
+  { title: "Preenchimento Labial", image: labios, badge: "Antes e Depois" },
+  { title: "Rejuvenescimento Facial", image: rejuvenescimento2, badge: "Antes e Depois" },
+  { title: "Botox Global", image: pacienteBotox, badge: "Antes e Depois" }
 ];
