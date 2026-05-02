@@ -440,7 +440,7 @@ export default function Home() {
             <ul className="space-y-4 font-body">
               {[
                 { name: 'Procedimentos', href: '#servicos' },
-                { name: 'Sobre Mim', href: '#sobre' },
+                { name: 'Sobre Mim', href: '#hero' },
                 { name: 'Antes e Depois', href: '#resultados' },
                 { name: 'Depoimentos', href: '#depoimentos' },
                 { name: 'FAQ', href: '#faq' }
