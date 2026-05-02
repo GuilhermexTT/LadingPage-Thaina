@@ -148,7 +148,7 @@ export default function Home() {
                 ))
               ) : (
                 <>Realce sua Melhor <br /> Versão. <br />
-                  <span className="text-gold italic">Resultados Naturais,</span> <br /> Avaliações personalizadas.</>
+                  <span className="text-gold italic">Resultados Naturais,</span> <br /> Técnicas avançadas.</>
               )}
             </h1>
 
@@ -535,7 +535,7 @@ const proceduresData = [
 ];
 
 const testimonialsData = [
-  { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria: natural e elegante. Minha autoestima mudou completamente!" },
+  { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria natural e elegante. Minha autoestima mudou completamente!" },
   { name: "Rubinho", role: "Paciente", image: rubinho, text: "Ficou ótimo, bem discreto, ninguém percebeu que fiz, só falaram que fiquei com a aparência mais descansada. Era exatamente isso que eu queria!" }
 ];
 
