@@ -47,7 +47,13 @@ export default function Home() {
     // Fetch CMS Data
     const fetchData = async () => {
       try {
-        const cmsProcedures = await client.fetch(proceduresQuery);
+        const [cmsProcedures, cmsTestimonials, cmsResults, cmsConfig] = await Promise.all([
+          client.fetch(proceduresQuery),
+          client.fetch(testimonialsQuery),
+          client.fetch(resultsQuery),
+          client.fetch(siteConfigQuery)
+        ]);
+
         if (cmsProcedures?.length > 0) {
           // Merge CMS procedures with hardcoded ones, avoiding duplicates by name
           setProcedures((prev) => [
@@ -56,7 +62,6 @@ export default function Home() {
           ]);
         }
 
-        const cmsTestimonials = await client.fetch(testimonialsQuery);
         if (cmsTestimonials?.length > 0) {
           // Merge CMS testimonials
           setTestimonials((prev) => [
@@ -65,7 +70,6 @@ export default function Home() {
           ]);
         }
 
-        const cmsResults = await client.fetch(resultsQuery);
         if (cmsResults?.length > 0) {
           setResults((prev) => [
             ...cmsResults,
@@ -73,7 +77,6 @@ export default function Home() {
           ]);
         }
 
-        const cmsConfig = await client.fetch(siteConfigQuery);
         if (cmsConfig) setSiteConfig((prev: any) => ({ ...prev, ...cmsConfig }));
       } catch (error) {
         console.error("CMS Fetch error:", error);
@@ -489,16 +492,18 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-soft-beige/40 text-[10px] uppercase tracking-[0.2em]">
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <p>© 2024 Dra. Thainá Carvalho. Todos os direitos reservados.</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 border-t border-white/5 grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-soft-beige/40 text-[10px] uppercase tracking-[0.2em]">
+          <div className="flex flex-col items-center md:items-start space-y-2 order-2 md:order-1">
+            <p>© 2026 Dra. Thainá Carvalho. Todos os direitos reservados.</p>
             <p className="font-body font-bold text-gold/60 text-xs tracking-widest">CREFITO 3 351518-F</p>
           </div>
-          <div className="flex space-x-8">
-            <Link href="/privacidade" className="hover:text-gold transition-colors">Política de Privacidade</Link>
-            <Link href="/termos" className="hover:text-gold transition-colors">Termos de Uso</Link>
+          <div className="flex justify-center space-x-8 order-1 md:order-2">
+            <Link href="/privacidade" className="hover:text-gold transition-colors whitespace-nowrap">Política de Privacidade</Link>
+            <Link href="/termos" className="hover:text-gold transition-colors whitespace-nowrap">Termos de Uso</Link>
           </div>
-          <p>Desenvolvido com carinho para realçar sua beleza.</p>
+          <div className="flex justify-center md:justify-end order-3">
+            <p className="text-center md:text-right">Desenvolvido por <Link href="https://www.aethersolutions.com.br/" target="_blank" className="hover:text-gold transition-colors font-bold">Aether Solutions</Link></p>
+          </div>
         </div>
       </footer>
     </main>

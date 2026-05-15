@@ -109,8 +109,20 @@ export default function Termos() {
         </div>
       </section>
 
-      <footer className="bg-zinco text-soft-beige/40 text-[10px] uppercase tracking-[0.2em] py-8 text-center border-t border-white/5">
-        <p>© 2024 Dra. Thainá Carvalho. Todos os direitos reservados.</p>
+      <footer className="bg-zinco text-soft-beige/40 text-[10px] uppercase tracking-[0.2em] py-12 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+          <div className="flex flex-col items-center md:items-start space-y-2 order-2 md:order-1">
+            <p>© 2026 Dra. Thainá Carvalho. Todos os direitos reservados.</p>
+            <p className="font-body font-bold text-gold/60 text-xs tracking-widest">CREFITO 3 351518-F</p>
+          </div>
+          <div className="flex justify-center space-x-8 order-1 md:order-2">
+            <Link href="/privacidade" className="hover:text-gold transition-colors whitespace-nowrap">Política de Privacidade</Link>
+            <Link href="/termos" className="hover:text-gold transition-colors whitespace-nowrap">Termos de Uso</Link>
+          </div>
+          <div className="flex justify-center md:justify-end order-3">
+            <p className="text-center md:text-right">Desenvolvido por <Link href="https://www.aethersolutions.com.br/" target="_blank" className="hover:text-gold transition-colors font-bold">Aether Solutions</Link></p>
+          </div>
+        </div>
       </footer>
     </main>
   );
