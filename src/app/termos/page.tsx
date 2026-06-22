@@ -97,7 +97,7 @@ export default function Termos() {
 
             <div className="pt-12 border-t border-gold/10 text-center">
               <p className="font-title font-bold text-zinco text-xl mb-2">Foro e Jurisdição</p>
-              <p className="text-zinco/60">Para dirimir quaisquer controvérsias oriundas deste termo, fica eleito o foro da comarca de Osasco/SP.</p>
+              <p className="text-zinco/60">Para dirimir quaisquer controvérsias oriundas deste termo, fica eleito o foro da comarca de Barueri/SP.</p>
             </div>
           </div>
 

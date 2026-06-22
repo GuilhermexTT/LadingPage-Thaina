@@ -17,7 +17,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "Dra. Thainá Carvalho | Estética Avançada & Harmonização",
-  description: "Especialista em Harmonização Facial, Corporal e Rejuvenescimento. Resultados naturais e sofisticados em Osasco - São Paulo.",
+  description: "Especialista em Harmonização Facial, Corporal e Rejuvenescimento. Resultados naturais e sofisticados em Alphaville, Barueri - São Paulo.",
   icons: {
     icon: "/icon.png",
   },

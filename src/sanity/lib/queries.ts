@@ -14,7 +14,14 @@ export const testimonialsQuery = groq`*[_type == "testimonial"] {
   "image": image.asset->url
 }`
 
-export const siteConfigQuery = groq`*[_type == "siteConfig"][0]`
+export const siteConfigQuery = groq`*[_type == "siteConfig"][0] {
+  ...,
+  "heroImage": heroImage.asset->url,
+  "aboutImage": aboutImage.asset->url,
+  "facialImage": facialImage.asset->url,
+  "peleImage": peleImage.asset->url,
+  "corporalImage": corporalImage.asset->url
+}`
 
 export const resultsQuery = groq`*[_type == "result"] | order(order asc) {
   title,

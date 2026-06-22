@@ -35,5 +35,45 @@ export default defineType({
       title: 'Subtítulo Hero',
       type: 'text',
     }),
+    defineField({
+      name: 'heroImage',
+      title: 'Foto Principal (Hero)',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'aboutImage',
+      title: 'Foto da Seção Sobre',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'facialImage',
+      title: 'Foto Categoria - Harmonização Facial',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'peleImage',
+      title: 'Foto Categoria - Pele & Rejuvenescimento',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'corporalImage',
+      title: 'Foto Categoria - Tratamentos Corporais',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
   ],
 })

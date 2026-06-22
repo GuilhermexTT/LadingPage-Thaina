@@ -7,11 +7,6 @@ import Navbar from "../components/Navbar";
 import Background from "../components/Background";
 import thainaMain from "../../styles/imagens/thainaMain_2k.jpg";
 import thainaAtendendo from "../../styles/imagens/ThainaAtendendo.jpeg";
-import labios from "../../styles/imagens/labios.jpeg";
-import rejuvenescimento2 from "../../styles/imagens/rejuvenescimento2.jpeg";
-import pacienteBotox from "../../styles/imagens/pacienteBotox.jpeg";
-import luciana from "../../styles/imagens/luciana.jpg";
-import rubinho from "../../styles/imagens/rubinho.jpg";
 import facialProc from "../../styles/imagens/FacialProcedimento.jpeg";
 import rejuvProc from "../../styles/imagens/RejuvProcedimento.jpeg";
 import corporalProc from "../../styles/imagens/ProcedimentoCorporal.jpeg";
@@ -23,7 +18,7 @@ import { proceduresQuery, testimonialsQuery, siteConfigQuery, resultsQuery } fro
 const WHATSAPP_LINK = "https://wa.me/5511951266988?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20para%20conhecer%20melhor%20os%20procedimentos.";
 const INSTAGRAM_LINK = "https://instagram.com/thainacarvalhofisio";
 const EMAIL = "thaina.cardoso.carvalho@gmail.com";
-const ADDRESS = "Pátio Osasco - torre 2 - sala 211, Osasco, São Paulo";
+const ADDRESS = "Alameda Grajaú, 60, conjunto 907 - Alphaville Industrial, Barueri - SP";
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -33,9 +28,9 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
   // CMS Data States
-  const [procedures, setProcedures] = useState<any[]>(proceduresData);
-  const [testimonials, setTestimonials] = useState<any[]>(testimonialsData);
-  const [results, setResults] = useState<any[]>(resultsData);
+  const [procedures, setProcedures] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [results, setResults] = useState<any[]>([]);
   const [siteConfig, setSiteConfig] = useState<any>({
     whatsapp: WHATSAPP_LINK,
     instagram: INSTAGRAM_LINK,
@@ -54,28 +49,9 @@ export default function Home() {
           client.fetch(siteConfigQuery)
         ]);
 
-        if (cmsProcedures?.length > 0) {
-          // Merge CMS procedures with hardcoded ones, avoiding duplicates by name
-          setProcedures((prev) => [
-            ...cmsProcedures,
-            ...proceduresData.filter(p => !cmsProcedures.some((cp: any) => cp.name === p.name))
-          ]);
-        }
-
-        if (cmsTestimonials?.length > 0) {
-          // Merge CMS testimonials
-          setTestimonials((prev) => [
-            ...cmsTestimonials,
-            ...testimonialsData.filter(t => !cmsTestimonials.some((ct: any) => ct.name === t.name))
-          ]);
-        }
-
-        if (cmsResults?.length > 0) {
-          setResults((prev) => [
-            ...cmsResults,
-            ...resultsData.filter(r => !cmsResults.some((cr: any) => cr.title === r.title))
-          ]);
-        }
+        setProcedures(cmsProcedures || []);
+        setTestimonials(cmsTestimonials || []);
+        setResults(cmsResults || []);
 
         if (cmsConfig) setSiteConfig((prev: any) => ({ ...prev, ...cmsConfig }));
       } catch (error) {
@@ -128,7 +104,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="relative order-1 flex justify-center animate-fade-in">
             <div className="relative w-full max-w-lg aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-2 border-gold/20">
-              <Image src={thainaMain} alt="Dra. Thainá Carvalho" fill className="object-cover" priority />
+              <Image src={siteConfig.heroImage || thainaMain} alt="Dra. Thainá Carvalho" fill className="object-cover" priority />
               <div className="absolute inset-0 border-[12px] border-white/10 rounded-[2.5rem]" />
             </div>
             <div className="absolute -z-10 -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 w-full h-full border-2 border-gold rounded-[2.5rem]" />
@@ -187,7 +163,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative group">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[3rem] shadow-2xl border-4 border-white">
-              <Image src={thainaAtendendo} alt="Dra. Thainá atendendo" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Image src={siteConfig.aboutImage || thainaAtendendo} alt="Dra. Thainá atendendo" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>
           </div>
           <div className="flex flex-col space-y-8 text-left">
@@ -209,9 +185,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {[
-              { id: "facial", title: "Harmonização Facial", image: facialProc, description: "Realce da beleza com naturalidade e equilíbrio" },
-              { id: "pele", title: "Pele e Rejuvenescimento", image: rejuvProc, description: "Tecnologias avançadas para saúde e viço" },
-              { id: "corporal", title: "Tratamentos Corporais", image: corporalProc, description: "Modelagem, firmeza e cuidado com o corpo" }
+              { id: "facial", title: "Harmonização Facial", image: siteConfig.facialImage || facialProc, description: "Realce da beleza com naturalidade e equilíbrio" },
+              { id: "pele", title: "Pele e Rejuvenescimento", image: siteConfig.peleImage || rejuvProc, description: "Tecnologias avançadas para saúde e viço" },
+              { id: "corporal", title: "Tratamentos Corporais", image: siteConfig.corporalImage || corporalProc, description: "Modelagem, firmeza e cuidado com o corpo" }
             ].map((niche) => (
               <button key={niche.id} onClick={() => { setActiveNiche(niche.id); const el = document.getElementById('lista-procedimentos'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className={`relative group h-[400px] rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl ${activeNiche === niche.id ? 'ring-4 ring-gold ring-offset-4 scale-[1.02]' : 'hover:scale-[1.02]'}`}>
                 <Image src={niche.image} alt={niche.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -398,7 +374,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl overflow-hidden h-64 border border-gold/20 shadow-xl">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.077241315486!2d-46.776189924546575!3d-23.54350197880922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf015401917f69%3A0xc3f83733c77d61b3!2zUMOhdGlvIE9zYXNjbw!5e0!3m2!1spt-BR!2sbr!4v1714421234567!5m2!1spt-BR!2sbr" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.337775535317!2d-46.85172282369689!3d-23.513511360155286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf03ea7f938f3f%3A0x8683510e4176d654!2sAlameda+Graja%C3%BA%2C+60+-+Alphaville+Industrial%2C+Barueri+-+SP!5e0!3m2!1spt-BR!2sbr!4v1719000000000!5m2!1spt-BR!2sbr" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy"></iframe>
               </div>
             </div>
           </div>
@@ -509,43 +485,3 @@ export default function Home() {
     </main>
   );
 }
-
-const proceduresData = [
-  { niche: "facial", name: "Harmonização Facial Full Face", desc: "Planejamento completo para equilíbrio e proporção facial, com resultado natural e sofisticado. Pode associar toxina botulínica, preenchimento com ácido hialurônico, bioestimuladores e fios, visando equilíbrio, proporção e rejuvenescimento global." },
-  { niche: "facial", name: "Toxina Botulínica (Botox Full Face)", desc: "Suaviza linhas de expressão e previne rugas, mantendo leveza e naturalidade." },
-  { niche: "facial", name: "Preenchimento com Ácido Hialurônico", desc: "Restaura volume, contorno e hidratação da pele de forma harmônica." },
-  { niche: "facial", name: "Contorno Mandibular e Mento", desc: "Define o ângulo da face, proporcionando mais estrutura e elegância." },
-  { niche: "facial", name: "Escultura Labial", desc: "Realce dos lábios com proporção, hidratação e naturalidade." },
-  { niche: "facial", name: "Rinomodelação com Ácido Hialurônico", desc: "Correção estética do nariz sem cirurgia, com resultado imediato." },
-  { niche: "facial", name: "Lipo Enzimática de Papada", desc: "Redução da gordura localizada abaixo do queixo, melhorando o contorno facial." },
-  { niche: "pele", name: "Bioestimuladores de Colágeno", desc: "Estimula a produção natural de colágeno, melhorando firmeza e qualidade da pele." },
-  { niche: "pele", name: "Skinbooster (hidratação profunda)", desc: "Hidratação intensa que melhora textura, viço e elasticidade da pele." },
-  { niche: "pele", name: "Bioestimulação com Fios de PDO", desc: "Estimula colágeno e promove efeito regenerador na pele." },
-  { niche: "pele", name: "Lifting com Fios de Sustentação", desc: "Reposicionamento dos tecidos com efeito lifting sem cirurgia." },
-  { niche: "pele", name: "Peelings Químicos Personalizados", desc: "Renovação da pele, melhora manchas, textura e luminosidade." },
-  { niche: "pele", name: "Microagulhamento Facial", desc: "Estimula colágeno e trata cicatrizes, poros e textura da pele." },
-  { niche: "pele", name: "Protocolos para Acne e Cicatrizes", desc: "Tratamentos personalizados para controle da acne e melhora das marcas." },
-  { niche: "pele", name: "Limpeza de Pele Premium", desc: "Higienização profunda com cuidado e técnica para uma pele saudável." },
-  { niche: "pele", name: "Intradermoterapia Capilar", desc: "Tratamento para fortalecimento e crescimento capilar." },
-  { niche: "pele", name: "Microagulhamento Capilar", desc: "Estimula o couro cabeludo, auxiliando no combate à queda capilar." },
-  { niche: "corporal", name: "Harmonização Corporal", desc: "Planejamento completo para melhorar contorno e proporções corporais." },
-  { niche: "corporal", name: "Harmonização Glútea", desc: "Realce do volume e contorno dos glúteos com naturalidade. Planejamento completo que pode associar bioestimuladores de colágeno, técnicas de volumização e contorno, além de protocolos complementares como intradermoterapia corporal, tratamentos para celulite e flacidez e estímulo da qualidade da pele. Indicado para melhorar o formato, projetar o volume, aumentar a firmeza e proporcionar um contorno mais harmônico e natural dos glúteos." },
-  { niche: "corporal", name: "Bioestimuladores Corporais", desc: "Melhora da firmeza e qualidade da pele em diversas regiões do corpo." },
-  { niche: "corporal", name: "Aplicações para Gordura Localizada", desc: "Redução de medidas com protocolos personalizados." },
-  { niche: "corporal", name: "Intradermoterapia Corporal", desc: "Tratamento para celulite, estrias e flacidez." },
-  { niche: "corporal", name: "Skinbooster Corporal", desc: "Hidratação profunda e melhora da qualidade da pele corporal." },
-  { niche: "corporal", name: "Drenagem Linfática", desc: "Redução de inchaço e melhora da circulação." },
-  { niche: "corporal", name: "Massagem Modeladora", desc: "Auxilia na definição corporal e melhora do contorno." },
-  { niche: "corporal", name: "Depilação a Laser", desc: "Tecnologia avançada para redução progressiva dos pelos, proporcionando mais conforto, praticidade e melhora da qualidade da pele. Indicado para diversas regiões do corpo, with resultados duradouros e seguros." }
-];
-
-const testimonialsData = [
-  { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria natural e elegante. Minha autoestima mudou completamente!" },
-  { name: "Rubinho", role: "Paciente", image: rubinho, text: "Ficou ótimo, bem discreto, ninguém percebeu que fiz, só falaram que fiquei com a aparência mais descansada. Era exatamente isso que eu queria!" }
-];
-
-const resultsData = [
-  { title: "Preenchimento Labial", image: labios, badge: "Antes e Depois" },
-  { title: "Rejuvenescimento Facial", image: rejuvenescimento2, badge: "Antes e Depois" },
-  { title: "Botox Global", image: pacienteBotox, badge: "Antes e Depois" }
-];
