@@ -7,9 +7,6 @@ import Navbar from "../components/Navbar";
 import Background from "../components/Background";
 import thainaMain from "../../styles/imagens/thainaMain_2k.jpg";
 import thainaAtendendo from "../../styles/imagens/ThainaAtendendo.jpeg";
-import labios from "../../styles/imagens/labios.jpeg";
-import rejuvenescimento2 from "../../styles/imagens/rejuvenescimento2.jpeg";
-import pacienteBotox from "../../styles/imagens/pacienteBotox.jpeg";
 import luciana from "../../styles/imagens/luciana.jpg";
 import rubinho from "../../styles/imagens/rubinho.jpg";
 import facialProc from "../../styles/imagens/FacialProcedimento.jpeg";
@@ -35,7 +32,7 @@ export default function Home() {
   // CMS Data States
   const [procedures, setProcedures] = useState<any[]>(proceduresData);
   const [testimonials, setTestimonials] = useState<any[]>(testimonialsData);
-  const [results, setResults] = useState<any[]>(resultsData);
+  const [results, setResults] = useState<any[]>([]);
   const [siteConfig, setSiteConfig] = useState<any>({
     whatsapp: WHATSAPP_LINK,
     instagram: INSTAGRAM_LINK,
@@ -71,10 +68,7 @@ export default function Home() {
         }
 
         if (cmsResults?.length > 0) {
-          setResults((prev) => [
-            ...cmsResults,
-            ...resultsData.filter(r => !cmsResults.some((cr: any) => cr.title === r.title))
-          ]);
+          setResults(cmsResults);
         }
 
         if (cmsConfig) setSiteConfig((prev: any) => ({ ...prev, ...cmsConfig }));
@@ -542,10 +536,4 @@ const proceduresData = [
 const testimonialsData = [
   { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria natural e elegante. Minha autoestima mudou completamente!" },
   { name: "Rubinho", role: "Paciente", image: rubinho, text: "Ficou ótimo, bem discreto, ninguém percebeu que fiz, só falaram que fiquei com a aparência mais descansada. Era exatamente isso que eu queria!" }
-];
-
-const resultsData = [
-  { title: "Preenchimento Labial", image: labios, badge: "Antes e Depois" },
-  { title: "Rejuvenescimento Facial", image: rejuvenescimento2, badge: "Antes e Depois" },
-  { title: "Botox Global", image: pacienteBotox, badge: "Antes e Depois" }
 ];
