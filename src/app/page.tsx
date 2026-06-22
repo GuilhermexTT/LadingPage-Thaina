@@ -7,6 +7,11 @@ import Navbar from "../components/Navbar";
 import Background from "../components/Background";
 import thainaMain from "../../styles/imagens/thainaMain_2k.jpg";
 import thainaAtendendo from "../../styles/imagens/ThainaAtendendo.jpeg";
+import labios from "../../styles/imagens/labios.jpeg";
+import rejuvenescimento2 from "../../styles/imagens/rejuvenescimento2.jpeg";
+import pacienteBotox from "../../styles/imagens/pacienteBotox.jpeg";
+import luciana from "../../styles/imagens/luciana.jpg";
+import rubinho from "../../styles/imagens/rubinho.jpg";
 import facialProc from "../../styles/imagens/FacialProcedimento.jpeg";
 import rejuvProc from "../../styles/imagens/RejuvProcedimento.jpeg";
 import corporalProc from "../../styles/imagens/ProcedimentoCorporal.jpeg";
@@ -28,9 +33,9 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
   // CMS Data States
-  const [procedures, setProcedures] = useState<any[]>([]);
-  const [testimonials, setTestimonials] = useState<any[]>([]);
-  const [results, setResults] = useState<any[]>([]);
+  const [procedures, setProcedures] = useState<any[]>(proceduresData);
+  const [testimonials, setTestimonials] = useState<any[]>(testimonialsData);
+  const [results, setResults] = useState<any[]>(resultsData);
   const [siteConfig, setSiteConfig] = useState<any>({
     whatsapp: WHATSAPP_LINK,
     instagram: INSTAGRAM_LINK,
@@ -49,9 +54,28 @@ export default function Home() {
           client.fetch(siteConfigQuery)
         ]);
 
-        setProcedures(cmsProcedures || []);
-        setTestimonials(cmsTestimonials || []);
-        setResults(cmsResults || []);
+        if (cmsProcedures?.length > 0) {
+          // Merge CMS procedures with hardcoded ones, avoiding duplicates by name
+          setProcedures((prev) => [
+            ...cmsProcedures,
+            ...proceduresData.filter(p => !cmsProcedures.some((cp: any) => cp.name === p.name))
+          ]);
+        }
+
+        if (cmsTestimonials?.length > 0) {
+          // Merge CMS testimonials
+          setTestimonials((prev) => [
+            ...cmsTestimonials,
+            ...testimonialsData.filter(t => !cmsTestimonials.some((ct: any) => ct.name === t.name))
+          ]);
+        }
+
+        if (cmsResults?.length > 0) {
+          setResults((prev) => [
+            ...cmsResults,
+            ...resultsData.filter(r => !cmsResults.some((cr: any) => cr.title === r.title))
+          ]);
+        }
 
         if (cmsConfig) setSiteConfig((prev: any) => ({ ...prev, ...cmsConfig }));
       } catch (error) {
@@ -485,3 +509,43 @@ export default function Home() {
     </main>
   );
 }
+
+const proceduresData = [
+  { niche: "facial", name: "Harmonização Facial Full Face", desc: "Planejamento completo para equilíbrio e proporção facial, com resultado natural e sofisticado. Pode associar toxina botulínica, preenchimento com ácido hialurônico, bioestimuladores e fios, visando equilíbrio, proporção e rejuvenescimento global." },
+  { niche: "facial", name: "Toxina Botulínica (Botox Full Face)", desc: "Suaviza linhas de expressão e previne rugas, mantendo leveza e naturalidade." },
+  { niche: "facial", name: "Preenchimento com Ácido Hialurônico", desc: "Restaura volume, contorno e hidratação da pele de forma harmônica." },
+  { niche: "facial", name: "Contorno Mandibular e Mento", desc: "Define o ângulo da face, proporcionando mais estrutura e elegância." },
+  { niche: "facial", name: "Escultura Labial", desc: "Realce dos lábios com proporção, hidratação e naturalidade." },
+  { niche: "facial", name: "Rinomodelação com Ácido Hialurônico", desc: "Correção estética do nariz sem cirurgia, com resultado imediato." },
+  { niche: "facial", name: "Lipo Enzimática de Papada", desc: "Redução da gordura localizada abaixo do queixo, melhorando o contorno facial." },
+  { niche: "pele", name: "Bioestimuladores de Colágeno", desc: "Estimula a produção natural de colágeno, melhorando firmeza e qualidade da pele." },
+  { niche: "pele", name: "Skinbooster (hidratação profunda)", desc: "Hidratação intensa que melhora textura, viço e elasticidade da pele." },
+  { niche: "pele", name: "Bioestimulação com Fios de PDO", desc: "Estimula colágeno e promove efeito regenerador na pele." },
+  { niche: "pele", name: "Lifting com Fios de Sustentação", desc: "Reposicionamento dos tecidos com efeito lifting sem cirurgia." },
+  { niche: "pele", name: "Peelings Químicos Personalizados", desc: "Renovação da pele, melhora manchas, textura e luminosidade." },
+  { niche: "pele", name: "Microagulhamento Facial", desc: "Estimula colágeno e trata cicatrizes, poros e textura da pele." },
+  { niche: "pele", name: "Protocolos para Acne e Cicatrizes", desc: "Tratamentos personalizados para controle da acne e melhora das marcas." },
+  { niche: "pele", name: "Limpeza de Pele Premium", desc: "Higienização profunda com cuidado e técnica para uma pele saudável." },
+  { niche: "pele", name: "Intradermoterapia Capilar", desc: "Tratamento para fortalecimento e crescimento capilar." },
+  { niche: "pele", name: "Microagulhamento Capilar", desc: "Estimula o couro cabeludo, auxiliando no combate à queda capilar." },
+  { niche: "corporal", name: "Harmonização Corporal", desc: "Planejamento completo para melhorar contorno e proporções corporais." },
+  { niche: "corporal", name: "Harmonização Glútea", desc: "Realce do volume e contorno dos glúteos com naturalidade. Planejamento completo que pode associar bioestimuladores de colágeno, técnicas de volumização e contorno, além de protocolos complementares como intradermoterapia corporal, tratamentos para celulite e flacidez e estímulo da qualidade da pele. Indicado para melhorar o formato, projetar o volume, aumentar a firmeza e proporcionar um contorno mais harmônico e natural dos glúteos." },
+  { niche: "corporal", name: "Bioestimuladores Corporais", desc: "Melhora da firmeza e qualidade da pele em diversas regiões do corpo." },
+  { niche: "corporal", name: "Aplicações para Gordura Localizada", desc: "Redução de medidas com protocolos personalizados." },
+  { niche: "corporal", name: "Intradermoterapia Corporal", desc: "Tratamento para celulite, estrias e flacidez." },
+  { niche: "corporal", name: "Skinbooster Corporal", desc: "Hidratação profunda e melhora da qualidade da pele corporal." },
+  { niche: "corporal", name: "Drenagem Linfática", desc: "Redução de inchaço e melhora da circulação." },
+  { niche: "corporal", name: "Massagem Modeladora", desc: "Auxilia na definição corporal e melhora do contorno." },
+  { niche: "corporal", name: "Depilação a Laser", desc: "Tecnologia avançada para redução progressiva dos pelos, proporcionando mais conforto, praticidade e melhora da qualidade da pele. Indicado para diversas regiões do corpo, with resultados duradouros e seguros." }
+];
+
+const testimonialsData = [
+  { name: "Luciana Santos", role: "Paciente", image: luciana, text: "Sempre tive muito medo de agulhas e de resultados artificiais. A Dra. foi incrivelmente paciente, explicou cada passo e o resultado foi exatamente o que eu queria natural e elegante. Minha autoestima mudou completamente!" },
+  { name: "Rubinho", role: "Paciente", image: rubinho, text: "Ficou ótimo, bem discreto, ninguém percebeu que fiz, só falaram que fiquei com a aparência mais descansada. Era exatamente isso que eu queria!" }
+];
+
+const resultsData = [
+  { title: "Preenchimento Labial", image: labios, badge: "Antes e Depois" },
+  { title: "Rejuvenescimento Facial", image: rejuvenescimento2, badge: "Antes e Depois" },
+  { title: "Botox Global", image: pacienteBotox, badge: "Antes e Depois" }
+];
