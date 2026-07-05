@@ -177,7 +177,7 @@ export default function Home() {
       </section>
 
       {/* Sobre Section */}
-      <section id="sobre" className="py-24 px-4 sm:px-6 lg:px-8 bg-white/30 backdrop-blur-sm reveal">
+      <section id="sobre" className="pt-24 pb-8 md:py-24 px-4 sm:px-6 lg:px-8 bg-white/30 backdrop-blur-sm reveal">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative group">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[3rem] shadow-2xl border-4 border-white">
@@ -195,7 +195,7 @@ export default function Home() {
       </section>
 
       {/* Serviços Section */}
-      <section id="servicos" className="py-24 px-4 sm:px-6 lg:px-8 bg-soft-beige reveal">
+      <section id="servicos" className="pt-8 pb-24 md:py-24 px-4 sm:px-6 lg:px-8 bg-soft-beige reveal">
         <div className="max-w-7xl mx-auto text-center mb-16">
           <span className="text-sm font-bold text-gold tracking-widest uppercase font-body">Nossos Serviços</span>
           <h2 className="mt-4 text-4xl lg:text-6xl font-title font-bold text-zinco">Tratamentos de <span className="text-gold italic font-medium">Alta Performance</span></h2>
@@ -274,9 +274,14 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {results.map((result, idx) => (
-            <div key={idx} onClick={() => setSelectedImage(result)} className="relative group aspect-square rounded-[2rem] overflow-hidden shadow-2xl cursor-pointer">
+            <div
+              key={idx}
+              onClick={() => setSelectedImage(result)}
+              className="relative group rounded-[2rem] overflow-hidden shadow-2xl cursor-pointer"
+              style={{ aspectRatio: result.dimensions?.aspectRatio || '4/5' }}
+            >
               <Image src={result.image} alt={result.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-zinco/80 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -496,7 +501,7 @@ export default function Home() {
             <Link href="/termos" className="hover:text-gold transition-colors whitespace-nowrap">Termos de Uso</Link>
           </div>
           <div className="flex justify-center md:justify-end order-3">
-            <p className="text-center md:text-right">Desenvolvido por <Link href="https://www.aethersolutions.com.br/" target="_blank" className="hover:text-gold transition-colors font-bold">Aether Solutions</Link></p>
+            <p className="text-center md:text-right">Desenvolvido por <Link href="https://adisea.com.br/" target="_blank" className="hover:text-gold transition-colors font-bold">Adisea</Link></p>
           </div>
         </div>
       </footer>

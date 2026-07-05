@@ -11,7 +11,31 @@ export default defineConfig({
 
   basePath: '/admin',
 
-  plugins: [structureTool()],
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Conteúdo')
+          .items([
+            S.listItem()
+              .title('Configurações do Site')
+              .id('siteConfig')
+              .child(
+                S.document()
+                  .schemaType('siteConfig')
+                  .documentId('siteConfig')
+              ),
+            S.divider(),
+            ...S.documentTypeListItems().filter(
+              (item) => !['siteConfig'].includes(item.getId() || '')
+            ),
+          ]),
+    }),
+  ],
 
-  schema: schema,
+  schema: {
+    types: schema.types,
+    templates: (prev) =>
+      prev.filter((template) => template.schemaType !== 'siteConfig'),
+  },
 })
