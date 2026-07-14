@@ -18,6 +18,7 @@ export const siteConfigQuery = groq`*[_type == "siteConfig"][0] {
   ...,
   "heroImage": heroImage.asset->url,
   "aboutImage": aboutImage.asset->url,
+  "aboutImageDimensions": aboutImage.asset->metadata.dimensions,
   "facialImage": facialImage.asset->url,
   "peleImage": peleImage.asset->url,
   "corporalImage": corporalImage.asset->url
